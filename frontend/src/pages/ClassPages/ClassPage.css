@@ -1,0 +1,248 @@
+.class-page {
+  padding: 16px;
+}
+
+/* HEADER */
+.class-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.class-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ACTIONS */
+.class-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #1e40af;
+}
+
+.btn-outline {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-outline:hover {
+  background: #f8fafc;
+}
+
+/* SEARCH */
+.class-search-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.class-search-input {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 40px 10px 12px;
+  font-size: 14px;
+}
+
+.class-search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.class-search-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+
+/* EMPTY */
+.class-empty {
+  margin-top: 40px;
+  text-align: center;
+  color: #64748b;
+}
+/* Dropdown "Thêm" */
+.add-wrap {
+  position: relative;
+}
+
+.add-menu {
+  position: absolute;
+  top: calc(50px);
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+  padding: 8px;
+  z-index: 50;
+}
+
+.add-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.add-item:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+/* CARD LỚP HỌC */
+.class-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  margin-top: 24px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.class-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.class-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.class-card-icon {
+  font-size: 32px;
+}
+
+.class-card-name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.class-card-body {
+  padding: 20px;
+}
+
+.class-card-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.class-card-row:last-child {
+  border-bottom: none;
+}
+
+.class-card-label {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.class-card-value {
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.class-card-footer {
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.btn-card {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-card:hover {
+  background: #f1f5f9;
+}
+
+.btn-card-edit {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.btn-card-edit:hover {
+  background: #eff6ff;
+}
+
+.btn-card-delete {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-card-delete:hover {
+  background: #fef2f2;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .class-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .class-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .class-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,39 @@
+/* src/components/RoleSwitcher.css */
+.role-switcher {
+  display: flex;
+  gap: 4px;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.role-btn {
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.role-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.role-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 640px) {
+  .role-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}

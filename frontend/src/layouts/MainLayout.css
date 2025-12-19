@@ -1,0 +1,65 @@
+/* MainLayout.css */
+
+/* Điều chỉnh vị trí các nút */
+.button-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px; /* Giảm khoảng cách giữa các nút và tiêu đề */
+}
+
+/* Các nút cơ bản */
+.action-btn {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 32px 46px; /* Làm các nút to hơn */
+  border-radius: 8px;
+  font-size: 22px; /* Làm chữ to hơn */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.1);
+}
+
+/* Hiệu ứng pop khi hover */
+.action-btn:hover {
+  transform: translateY(-5px); /* Nâng nút lên khi hover */
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.2);
+}
+
+/* Các button với màu sắc khác nhau (giữ nền trắng và chữ đen) */
+.btn-create {
+  background-color: #ffffff; /* Màu nền trắng */
+  color: #000000; /* Màu chữ đen */
+}
+
+.btn-create:hover {
+  background-color: #f0f0f0; /* Đổi màu nền khi hover */
+}
+
+.btn-bank {
+  background-color: #ffffff; /* Màu nền trắng */
+  color: #000000; /* Màu chữ đen */
+}
+
+.btn-bank:hover {
+  background-color: #f0f0f0; /* Đổi màu nền khi hover */
+}
+
+.btn-download {
+  background-color: #ffffff; /* Màu nền trắng */
+  color: #000000; /* Màu chữ đen */
+}
+
+.btn-download:hover {
+  background-color: #f0f0f0; /* Đổi màu nền khi hover */
+}
+
+/* Icon bên trong nút */
+.button-icon {
+  font-size: 24px; /* Làm icon to hơn */
+}

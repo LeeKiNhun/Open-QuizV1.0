@@ -1,0 +1,43 @@
+/* src/components/common/SelectionToolbar.css */
+.selection-toolbar {
+  background: #eff6ff;
+  border: 1px solid #3b82f6;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.toolbar-buttons {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.toolbar-buttons button {
+  padding: 8px 14px;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.toolbar-buttons button:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.toolbar-buttons button.danger {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.toolbar-buttons button.danger:hover {
+  background: #b91c1c;
+}

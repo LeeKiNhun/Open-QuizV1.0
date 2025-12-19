@@ -1,0 +1,70 @@
+/* src/App.css */
+
+/* ✅ FIX: Đừng bó khung app (gỡ style default của Vite) */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: initial; /* không ép center toàn bộ */
+}
+
+/* ========================= */
+/* 3 NÚT ACTION */
+/* ========================= */
+
+/* Điều chỉnh vị trí các nút */
+.button-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Các nút cơ bản */
+.action-btn {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 32px 46px;
+  border-radius: 8px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.1);
+}
+
+/* Hiệu ứng pop khi hover */
+.action-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.2);
+}
+
+/* Các button: nền trắng chữ đen */
+.btn-create,
+.btn-bank,
+.btn-download {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.btn-create:hover,
+.btn-bank:hover,
+.btn-download:hover {
+  background-color: #f0f0f0;
+}
+
+/* Icon bên trong nút */
+.button-icon {
+  font-size: 24px;
+}

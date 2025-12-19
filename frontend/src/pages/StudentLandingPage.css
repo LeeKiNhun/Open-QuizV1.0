@@ -1,0 +1,165 @@
+/* src/pages/StudentLandingPage.css */
+.student-landing {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.student-container {
+  background: white;
+  border-radius: 24px;
+  padding: 48px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.student-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.student-header h1 {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+}
+
+.student-header p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.student-form {
+  margin-bottom: 40px;
+}
+
+.student-input-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.student-input {
+  flex: 1;
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.student-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: scale(1.02);
+}
+
+.student-submit {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.student-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.student-submit:active {
+  transform: translateY(0);
+}
+
+.student-hint {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.student-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-top: 32px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.student-feature {
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.feature-title {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.feature-desc {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .student-container {
+    padding: 32px 24px;
+  }
+
+  .student-header h1 {
+    font-size: 26px;
+  }
+
+  .student-input-group {
+    flex-direction: column;
+  }
+
+  .student-submit {
+    width: 100%;
+  }
+
+  .student-features {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

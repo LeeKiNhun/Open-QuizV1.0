@@ -1,0 +1,245 @@
+.exam-page {
+  padding: 10px 6px 24px;
+}
+
+/* top row */
+.exam-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* search */
+.exam-search {
+  width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.exam-search input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+
+  color: #0f172a;
+  caret-color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+
+  background: transparent;
+}
+
+.exam-search-icon {
+  opacity: 0.7;
+}
+
+/* actions */
+.exam-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.exam-btn {
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.exam-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.97);
+}
+
+/* giống ảnh: xanh dương + xanh lá + 1 nút dạng ghost */
+.exam-btn-primary {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.exam-btn-green {
+  background: #84cc16;
+  color: #fff;
+}
+
+.exam-btn-ghost {
+  background: #0ea5e9;
+  color: #fff;
+}
+
+/* title */
+.exam-title {
+  margin: 8px 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* table card */
+.exam-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  overflow: visible;
+}
+
+.exam-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.exam-table thead th {
+  text-align: left;
+  padding: 14px 12px;
+  color: #64748b;
+  font-weight: 800;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.exam-table tbody td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  color: #0f172a;
+}
+
+.exam-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.col-check {
+  width: 44px;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.folder-icon {
+  opacity: 0.8;
+}
+
+.tag-pill {
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* empty */
+.empty {
+  text-align: center;
+  color: #64748b;
+  padding: 26px 12px;
+}
+
+/* footer */
+.exam-footer {
+  display: flex;
+  justify-content: flex-end;
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.exam-row-click {
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+.exam-row-click:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+/* Thanh hành động khi đã chọn */
+.exam-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 14px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  font-size: 14px;
+}
+
+/* Text "Đã chọn X" */
+.exam-selection-bar span {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Nhóm nút */
+.selection-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Nút chung */
+.selection-buttons button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  background: #2563eb;
+  color: #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+/* Hover chung */
+.selection-buttons button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+/* Nút Cut (xanh nhạt hơn) */
+.selection-buttons button:nth-child(2) {
+  background: #2563eb;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25);
+}
+
+.selection-buttons button:nth-child(2):hover {
+  box-shadow: 0 6px 14px rgba(14, 165, 233, 0.35);
+}
+
+/* Nút Xóa (danger) */
+.selection-buttons button:last-child {
+  background: #2563eb;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25);
+}
+
+.selection-buttons button:last-child:hover {
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25);
+}

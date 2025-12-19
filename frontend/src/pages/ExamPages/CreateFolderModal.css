@@ -1,0 +1,134 @@
+.cfm-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.cfm-modal{
+  width: min(760px, 92vw);
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(15,23,42,0.25);
+}
+
+.cfm-tabs{
+  display: flex;
+  gap: 22px;
+  padding: 14px 18px 0;
+  border-bottom: 1px solid rgba(148,163,184,0.35);
+}
+
+.cfm-tab{
+  border: none;
+  background: transparent;
+  padding: 12px 4px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #0f172a;
+  position: relative;
+}
+
+.cfm-tab.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:3px;
+  background:#1d4ed8;
+  border-radius: 999px;
+}
+
+.cfm-body{
+  padding: 16px 18px;
+}
+
+.cfm-input{
+  width: 100%;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid rgba(148,163,184,0.45);
+  padding: 0 12px;
+  outline: none;
+}
+
+.cfm-input:focus{
+  border-color:#1d4ed8;
+}
+
+.cfm-excel{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cfm-drop{
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  border: 2px dashed rgba(148,163,184,0.45);
+  background: #f8fafc;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cfm-drop:hover{
+  background: #eef2ff;
+  border-color:#1d4ed8;
+}
+
+.cfm-template{
+  border: none;
+  background: transparent;
+  color:#1d4ed8;
+  font-weight: 800;
+  cursor: pointer;
+  align-self: center;
+}
+
+.cfm-footer{
+  padding: 14px 18px 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cfm-btn{
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.cfm-cancel{
+  background: #d3281ce0;        /* xanh lá */
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.35);
+  transition: all 0.15s ease;
+}
+
+.cfm-save{
+  background: #22c55e;        /* xanh lá */
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.35);
+  transition: all 0.15s ease;
+}

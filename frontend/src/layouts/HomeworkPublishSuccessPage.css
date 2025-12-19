@@ -1,0 +1,361 @@
+/* src/pages/HomeWorkPages/PublishHomework.css */
+
+/* ===== OVERLAY BACKDROP ===== */
+.pbs-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: pbs-fade-in 0.3s ease;
+}
+
+@keyframes pbs-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== MODAL CONTAINER ===== */
+.pbs-page {
+  width: 100%;
+  max-width: 920px;
+  max-height: 90vh;
+  overflow: auto;
+  background: #f5f7fb; /* hoặc #fff tuỳ bạn */
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+  position: relative;
+}
+@keyframes pbs-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===== CLOSE BUTTON ===== */
+.pbs-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.pbs-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  transform: rotate(90deg);
+}
+
+/* ===== CONTENT WRAPPER ===== */
+.pbs-wrap {
+  width: 100%;
+  padding: 28px 24px;
+}
+
+/* ===== TITLE & SUBTITLE ===== */
+.pbs-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 8px;
+  padding-right: 40px; /* Space cho nút close */
+}
+
+.pbs-sub {
+  text-align: center;
+  color: #334155;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* ===== SUCCESS ICON ===== */
+.pbs-icon {
+  text-align: center;
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: pbs-bounce 0.6s ease;
+}
+
+@keyframes pbs-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* ===== CARD ===== */
+.pbs-card {
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  margin-bottom: 16px;
+}
+
+.pbs-card-title {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 16px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pbs-card-sub {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+/* ===== LINK ROW ===== */
+.pbs-link-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: all 0.2s;
+}
+
+.pbs-link-row:hover {
+  border-color: #cbd5e1;
+}
+
+.pbs-link {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ===== COPY BUTTON ===== */
+.pbs-copy {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  white-space: nowrap;
+}
+
+.pbs-copy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.pbs-copy:active {
+  transform: translateY(0);
+}
+
+/* ===== QR CODE SECTION ===== */
+.pbs-qr-section {
+  text-align: center;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.pbs-qr-section img {
+  border-radius: 12px;
+  border: 4px solid #f1f5f9;
+  margin-bottom: 12px;
+}
+
+/* ===== ACTIONS ===== */
+.pbs-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pbs-action {
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pbs-action.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.pbs-action.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.pbs-action.secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.pbs-action.secondary:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* ===== SCROLLBAR ===== */
+.pbs-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.pbs-page::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 0 20px 20px 0;
+}
+
+.pbs-page::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.pbs-page::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+.pbs-overlay {
+  position: absolute;   
+  inset: 0;             
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;          
+  padding: 20px;
+}
+
+  .pbs-page {
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+    animation: pbs-slide-up 0.3s ease;
+  }
+
+  @keyframes pbs-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .pbs-wrap {
+    padding: 20px 16px 32px;
+  }
+
+  .pbs-title {
+    font-size: 22px;
+  }
+
+  .pbs-icon {
+    font-size: 48px;
+  }
+
+  .pbs-actions {
+    flex-direction: column;
+  }
+
+  .pbs-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pbs-link-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pbs-copy {
+    width: 100%;
+  }
+}
+
+/* ===== DARK MODE (Optional) ===== */
+.pbs-page.dark {
+  background: #1e293b;
+}
+
+.pbs-page.dark .pbs-title {
+  color: #f1f5f9;
+}
+
+.pbs-page.dark .pbs-sub {
+  color: #cbd5e1;
+}
+
+.pbs-page.dark .pbs-card {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.pbs-page.dark .pbs-link-row {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.pbs-page.dark .pbs-link {
+  color: #f1f5f9;
+}

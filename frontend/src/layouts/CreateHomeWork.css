@@ -1,0 +1,402 @@
+/* ============================= */
+/* CREATE HOMEWORK – SCOPED */
+/* ============================= */
+
+.chw-layout {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px;
+
+  background: #f5f7fb;
+  color: #0f172a;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+.chw-layout .chw-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chw-layout .chw-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.chw-layout .chw-back {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* CARD */
+/* ============================= */
+.chw-layout .chw-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* ============================= */
+/* FIELD */
+/* ============================= */
+.chw-layout .chw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.chw-layout .chw-field label {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.chw-layout .chw-field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  outline: none;
+
+  font-size: 14px;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.chw-layout .chw-field input:focus {
+  border-color: #2563eb;
+}
+
+/* ============================= */
+/* ERROR */
+/* ============================= */
+.chw-layout .chw-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ============================= */
+/* TIME */
+/* ============================= */
+.chw-layout .chw-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chw-layout .chw-time span {
+  font-weight: 700;
+}
+
+.chw-layout .chw-reset {
+  border: none;
+  background: #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* UPLOAD */
+/* ============================= */
+.chw-layout .chw-upload {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px dashed #6366f1;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+}
+
+.chw-layout .chw-editor {
+  margin-top: 10px;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* ============================= */
+/* RADIO */
+/* ============================= */
+.chw-layout .chw-radio {
+  display: flex;
+  gap: 20px;
+}
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+.chw-layout .chw-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.chw-layout .chw-cancel {
+  background: #e5e7eb;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.chw-layout .chw-submit {
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 800;
+
+  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.35);
+}
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+.chw-layout.dark-mode {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.chw-layout.dark-mode .chw-card {
+  background: #020617;
+}
+
+.chw-layout.dark-mode .chw-field input {
+  background: #020617;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.chw-layout.dark-mode .chw-upload {
+  background: #020617;
+  color: #c7d2fe;
+  border-color: #818cf8;
+}
+
+.chw-layout.dark-mode .chw-editor {
+  background: #020617;
+  color: #cbd5f5;
+}
+
+.chw-layout.dark-mode .chw-cancel {
+  background: #334155;
+  color: #f8fafc;
+}
+
+/* Thêm vào cuối file CreateHomeWork.css */
+
+/* ===== CHỌN LỚP ===== */
+.chw-required {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.chw-class-search {
+  margin-bottom: 12px;
+}
+
+.chw-class-search input {
+  width: 100%;
+  padding: 10px 16px 10px 36px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.chw-class-search input:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+.chw-select-all {
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.chw-select-all label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.chw-select-all input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.chw-class-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+}
+
+.chw-empty-class {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.chw-class-group {
+  margin-bottom: 16px;
+}
+
+.chw-class-group:last-child {
+  margin-bottom: 0;
+}
+
+.chw-group-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.chw-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chw-class-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f9fafb;
+}
+
+.chw-class-item:hover {
+  background: #f3f4f6;
+}
+
+.chw-class-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.chw-class-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.chw-class-name {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.chw-class-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.chw-class-year,
+.chw-class-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chw-selected-count {
+  margin-top: 12px;
+  padding: 10px;
+  background: #dbeafe;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e40af;
+  text-align: center;
+}
+
+.chw-selected-count strong {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Dark mode */
+.chw-layout.dark-mode .chw-class-search input,
+.chw-layout.dark-mode .chw-class-list {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f9fafb;
+}
+
+.chw-layout.dark-mode .chw-select-all {
+  background: #374151;
+}
+
+.chw-layout.dark-mode .chw-class-item {
+  background: #111827;
+}
+
+.chw-layout.dark-mode .chw-class-item:hover {
+  background: #1f2937;
+}
+
+.chw-layout.dark-mode .chw-class-name {
+  color: #f9fafb;
+}
+
+.chw-layout.dark-mode .chw-group-name {
+  color: #818cf8;
+  border-color: #374151;
+}
+
+.chw-layout.dark-mode .chw-selected-count {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chw-class-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

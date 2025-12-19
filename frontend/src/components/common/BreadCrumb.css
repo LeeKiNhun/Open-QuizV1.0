@@ -1,0 +1,43 @@
+/* Tăng specificity bằng cách lặp class .oq-bc */
+.oq-bc.oq-bc {
+  margin: 12px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+.oq-bc.oq-bc .oq-bc__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.oq-bc.oq-bc .oq-bc__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ghi rõ a + class để thắng .oqf-page a */
+.oq-bc.oq-bc a.oq-bc__link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.oq-bc.oq-bc a.oq-bc__link:hover {
+  text-decoration: underline;
+}
+
+.oq-bc.oq-bc .oq-bc__active {
+  color: #111827;
+  font-weight: 700;
+}
+
+.oq-bc.oq-bc .oq-bc__sep {
+  color: #9ca3af;
+  user-select: none;
+}

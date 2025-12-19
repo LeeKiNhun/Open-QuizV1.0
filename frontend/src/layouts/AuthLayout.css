@@ -1,0 +1,289 @@
+/* src/layouts/AuthLayout.css */
+
+/* ============================= */
+/* RESET CƠ BẢN – (NÊN ĐỂ Ở index.css nếu muốn global) */
+/* ============================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* ============================= */
+/* FIX root full width */
+/* ============================= */
+#root {
+  width: 100%;
+}
+
+/* ============================= */
+/* LAYOUT TỔNG (SCOPED) */
+/* ============================= */
+.auth-layout {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* chừa không gian cho header fixed */
+  padding-top: 72px;
+
+  background: #f5f7fb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* ============================= */
+/* HEADER (SCOPED) */
+/* ============================= */
+.auth-layout .auth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  position: fixed; /* fixed đúng kiểu UI login */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.auth-layout .auth-header .logo h2 {
+  margin: 0;
+  color: #0b4dba;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.auth-layout .auth-header .flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-layout .auth-header .dark-mode-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-layout .auth-header .dark-mode-toggle img {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================= */
+/* BOX ĐĂNG NHẬP (SCOPED) */
+/* ============================= */
+.auth-layout .auth-box {
+  width: 100%;
+  max-width: 520px;
+
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.auth-layout .auth-box h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ============================= */
+/* INPUT (SCOPED) */
+/* ============================= */
+.auth-layout .input-group {
+  margin-bottom: 16px;
+}
+
+.auth-layout .input-group input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #0f172a;
+
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.auth-layout .input-group input:focus {
+  border-color: #2563eb;
+}
+
+/* ============================= */
+/* QUÊN MẬT KHẨU (SCOPED) */
+/* ============================= */
+.auth-layout .forgot-password {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.auth-layout .forgot-password a {
+  font-size: 14px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.auth-layout .forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* BUTTON CHÍNH (SCOPED) */
+/* ============================= */
+.auth-layout .auth-btn {
+  width: 100%;
+  height: 48px;
+
+  border-radius: 12px;
+  border: none;
+  background: #2563eb;
+
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s;
+}
+
+.auth-layout .auth-btn:hover {
+  background: #1e40af;
+}
+
+/* ============================= */
+/* SOCIAL LOGIN (SCOPED) */
+/* ============================= */
+.auth-layout .social-login {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-layout .social-btn {
+  height: 48px;
+  border-radius: 12px;
+
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #0f172a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 15px;
+  cursor: pointer;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.auth-layout .social-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+  opacity: 0.95;
+}
+
+.auth-layout .social-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================= */
+/* LINK ĐĂNG KÝ (SCOPED) */
+/* ============================= */
+.auth-layout .register-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #334155;
+}
+
+.auth-layout .register-link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-layout .register-link a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* DARK MODE (SCOPED) */
+/* ============================= */
+.auth-layout.dark-mode {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.auth-layout.dark-mode .auth-header {
+  background: #020617;
+}
+
+.auth-layout.dark-mode .auth-header .logo h2 {
+  color: #93c5fd;
+}
+
+.auth-layout.dark-mode .auth-box {
+  background: #020617;
+  color: #f8fafc;
+}
+
+.auth-layout.dark-mode .auth-box h2 {
+  color: #f8fafc; /* ✅ fix h2 bị đen */
+}
+
+.auth-layout.dark-mode .input-group input {
+  background: #020617;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.auth-layout.dark-mode .forgot-password a {
+  color: #93c5fd;
+}
+
+.auth-layout.dark-mode .register-link {
+  color: #cbd5e1;
+}
+
+.auth-layout.dark-mode .register-link a {
+  color: #93c5fd;
+}
+
+.auth-layout.dark-mode .social-btn {
+  background: #020617;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.auth-layout.dark-mode .social-btn:hover {
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+}
