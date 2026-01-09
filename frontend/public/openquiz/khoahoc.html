@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mua khóa học – OpenQuiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      padding: 24px;
+    }
+
+    .card {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+    }
+
+    h2 {
+      color: #1d4ed8;
+    }
+
+    .price {
+      font-size: 24px;
+      color: #dc2626;
+      font-weight: bold;
+      margin: 16px 0;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 18px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #15803d;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #475569;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>🎓 Khóa học Ôn thi THPT Quốc Gia</h2>
+
+  <p>✔️ 100 đề trắc nghiệm chuẩn cấu trúc</p>
+  <p>✔️ Giải chi tiết từng câu</p>
+  <p>✔️ Tài liệu + mẹo làm bài</p>
+
+  <div class="price">299.000đ</div>
+
+  <button onclick="pay()">
+    💳 Thanh toán ngay
+  </button>
+
+  <div class="note">
+    * Thanh toán demo – sau này nối VNPay / MoMo
+  </div>
+</div>
+
+<script>
+  function pay() {
+    alert("🎉 Thanh toán thành công (demo)!");
+    // sau này:
+    // redirect sang trang kích hoạt khóa học
+  }
+</script>
+
+</body>
+</html>

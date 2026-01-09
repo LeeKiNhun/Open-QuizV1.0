@@ -26,7 +26,8 @@ import QuestionBankEditorPage from "./pages/user/QuestionBankEditorPage";
 import QuestionBankStructureCreatePage from "./pages/user/QuestionBankStructureCreatePage";
 import QuestionBankStructureManagePage from "./pages/user/QuestionBankStructureManagePage";
 import StructureDocxPreviewPage from "./pages/user/StructureDocxPreviewPage";
-
+import TakeQuizPage from "./pages/TakeQuizPage";
+import TaiLieuPage from "./pages/TaiLieuPage";
 import "./App.css";
 
 function HomeScreen() {
@@ -398,8 +399,28 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-
+        <Route
+          path="/quizzes/:quizId/take"
+          element={
+              <MainLayout currentUser={currentUser} title="Trang làm bài" onLogout={handleLogout}>
+                <TakeQuizPage />
+              </MainLayout>
+          }
+        />
+        <Route
+          path="/tailieu"
+          element={
+            <ProtectedRoute currentUser={currentUser}>
+              <MainLayout
+                currentUser={currentUser}
+                title="Tài liệu"
+                onLogout={handleLogout}
+              >
+                <TaiLieuPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
         {/* ===== FALLBACK ===== */}
         <Route 
           path="*" 

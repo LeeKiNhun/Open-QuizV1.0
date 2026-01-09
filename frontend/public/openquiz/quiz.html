@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Làm bài trắc nghiệm</title>
+  <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h2>📝 Bài trắc nghiệm Địa Lí</h2>
+    <div class="timer">
+      ⏰ Thời gian còn lại: <span id="time">10:00</span>
+    </div>
+  </div>
+
+  <form id="quizForm">
+    <div class="question">
+      <p><b>Câu 1.</b> Địa hình Việt Nam chủ yếu là:</p>
+      <label><input type="radio" name="q1" value="A"> A. Núi cao</label>
+      <label><input type="radio" name="q1" value="B"> B. Đồi núi thấp</label>
+      <label><input type="radio" name="q1" value="C"> C. Đồng bằng</label>
+      <label><input type="radio" name="q1" value="D"> D. Sa mạc</label>
+    </div>
+
+    <div class="question">
+      <p><b>Câu 2.</b> Khí hậu Việt Nam mang tính:</p>
+      <label><input type="radio" name="q2" value="A"> A. Ôn đới</label>
+      <label><input type="radio" name="q2" value="B"> B. Hàn đới</label>
+      <label><input type="radio" name="q2" value="C"> C. Nhiệt đới ẩm gió mùa</label>
+      <label><input type="radio" name="q2" value="D"> D. Sa mạc</label>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="submitQuiz()">
+      📤 Nộp bài
+    </button>
+  </form>
+
+  <div id="result" class="result"></div>
+</div>
+
+<script src="quiz.js"></script>
+</body>
+</html>

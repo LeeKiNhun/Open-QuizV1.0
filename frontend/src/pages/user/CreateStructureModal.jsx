@@ -1,87 +1,119 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { api } from "../../api/client"; // nếu sai path, bạn chỉnh lại đúng chỗ file client.js của bạn
-
-/** Demo cấu trúc giống ảnh thư viện */
-function buildLibraryStructure({ khoi, mon, sach }) {
-  return {
-    source: "library",
-    khoi,
-    mon,
-    sach,
-    topics: [
-      {
-        id: "t_intro",
-        title: "Introduction",
-        open: true,
-        lessons: [
-          { id: "l_intro_a", title: "Bài A: Vocabulary - Likes and dislikes" },
-          { id: "l_intro_b", title: "Bài B: Grammar - Present simple and present continuous" },
-          { id: "l_intro_c", title: "Bài C: Vocabulary - Describing people" },
-          { id: "l_intro_d", title: "Bài D: Grammar - Articles" },
-        ],
-      },
-      {
-        id: "t_feel",
-        title: "Feelings",
-        open: true,
-        lessons: [
-          { id: "l_feel_a", title: "Bài A: Vocabulary - How do you feel?" },
-          { id: "l_feel_b", title: "Bài B: Grammar - Past simple (affirmative)" },
-          { id: "l_feel_c", title: "Bài C: Listening - Problems, problems!" },
-          { id: "l_feel_d", title: "Bài D: Grammar - Past simple (negative and interrogative), Question words" },
-        ],
-      },
-    ],
-  };
-}
+import { api } from "../../api/client";
+import { libraryApi } from "../../api/libraryApi";
 
 function uid(prefix = "id") {
   return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
 }
 
-// ✅ prop bankId để upload/save backend
+/**
+ * CreateStructureModal
+ * - choose: chọn Library hoặc Manual
+ * - library: chọn bookId -> preview units/lessons -> apply vào bank
+ * - manual: tự nhập topic/lesson -> lưu structureNodes vào bank (endpoint cũ /structure)
+ */
 export default function CreateStructureModal({ open, onClose, onSaved, bankId }) {
   const [step, setStep] = useState("choose"); // choose | library | manual
 
-  // ====== Library ======
-  const [khoi, setKhoi] = useState("Khối 10");
-  const [mon, setMon] = useState("Tiếng Anh");
-  const [sach, setSach] = useState("Tiếng Anh 10 - friends global");
-  const [lib, setLib] = useState(() =>
-    buildLibraryStructure({ khoi: "Khối 10", mon: "Tiếng Anh", sach: "Tiếng Anh 10 - friends global" })
-  );
+  // ====== LIBRARY ======
+  const [books, setBooks] = useState([]);
+  const [bookId, setBookId] = useState("");
+  const [bookDetail, setBookDetail] = useState(null); // { bookId, title, units:[{id,title,open,lessons:[{id,code,title}]}] }
+  const [loadingBooks, setLoadingBooks] = useState(false);
+  const [loadingBookDetail, setLoadingBookDetail] = useState(false);
 
-  // ====== Manual ======
+  // ====== MANUAL ======
   const [manualTopics, setManualTopics] = useState([]); // [{id,title,open,lessons:[{id,title}]}]
   const [topicTitle, setTopicTitle] = useState("");
   const [lessonTitle, setLessonTitle] = useState("");
   const [activeTopicId, setActiveTopicId] = useState("");
 
+  // ====== Reset khi mở modal ======
   useEffect(() => {
     if (!open) return;
-    // reset khi mở popup
+
     setStep("choose");
 
-    setKhoi("Khối 10");
-    setMon("Tiếng Anh");
-    setSach("Tiếng Anh 10 - friends global");
-    setLib(buildLibraryStructure({ khoi: "Khối 10", mon: "Tiếng Anh", sach: "Tiếng Anh 10 - friends global" }));
+    // reset library
+    setBooks([]);
+    setBookId("");
+    setBookDetail(null);
+    setLoadingBooks(false);
+    setLoadingBookDetail(false);
 
-    // manual reset
+    // reset manual
     setManualTopics([]);
     setTopicTitle("");
     setLessonTitle("");
     setActiveTopicId("");
   }, [open]);
 
+  // ====== Load list books khi vào step library ======
   useEffect(() => {
     if (!open) return;
     if (step !== "library") return;
-    setLib(buildLibraryStructure({ khoi, mon, sach }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [khoi, mon, sach, step, open]);
 
-  // ====== Helpers: nodes <-> topics (để onSaved vẫn hoạt động như cũ) ======
+    (async () => {
+      try {
+        setLoadingBooks(true);
+        const data = await libraryApi.listBooks(); // { ok, items:[{bookId,title}] }
+        if (data?.ok) {
+          const items = data.items || [];
+          setBooks(items);
+
+          // auto select first
+          const first = items[0];
+          if (first) setBookId((prev) => prev || first.bookId);
+        } else {
+          alert("Không tải được danh sách sách (library).");
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Lỗi tải danh sách sách (library).");
+      } finally {
+        setLoadingBooks(false);
+      }
+    })();
+  }, [open, step]);
+
+  // ====== Load book detail khi đổi bookId ======
+  useEffect(() => {
+    if (!open) return;
+    if (step !== "library") return;
+    if (!bookId) return;
+
+    (async () => {
+      try {
+        setLoadingBookDetail(true);
+        const data = await libraryApi.getBook(bookId); // { ok, item:{ bookId,title,units:[...] } }
+        if (data?.ok) {
+          const detail = data.item || {};
+          const units = (detail.units || []).map((u) => ({ ...u, open: true }));
+          setBookDetail({ ...detail, units });
+        } else {
+          alert("Không tải được cấu trúc sách.");
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Lỗi tải cấu trúc sách.");
+      } finally {
+        setLoadingBookDetail(false);
+      }
+    })();
+  }, [open, step, bookId]);
+
+  // ====== Toggle unit ======
+  const toggleUnit = (unitId) => {
+    setBookDetail((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        units: (prev.units || []).map((u) => (u.id === unitId ? { ...u, open: !u.open } : u)),
+      };
+    });
+  };
+
+  // ====== Helpers: convert -> structureNodes (endpoint cũ) ======
   const toStructureNodes = (structure) => {
     const topics = Array.isArray(structure?.topics) ? structure.topics : [];
     const nodes = [];
@@ -112,54 +144,40 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
     return nodes;
   };
 
-  const nodesToStructure = (nodes, extra = {}) => {
-    const list = Array.isArray(nodes) ? nodes : [];
-    const topics = list
-      .filter((n) => n.parentId == null)
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-      .map((t) => {
-        const lessons = list
-          .filter((n) => n.parentId === t.id)
-          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-          .map((l) => ({ id: l.id, title: l.title }));
-        return { id: t.id, title: t.title, open: !!t?.meta?.open, lessons };
-      });
-
-    return { source: extra.source || "manual", khoi, mon, sach: extra.sach || "(Tự nhập)", topics };
-  };
-
-  // ====== Save backend ======
-  const saveToBackendIfNeeded = async (structure, sourceOverride) => {
-    if (!bankId) return;
-
-    // ✅ phân biệt nguồn rõ ràng
-    const source = sourceOverride || structure?.source;
-    const structureSource =
-      source === "manual" ? "manual_entry" : source === "library" ? "azota_library" : "unknown";
-
-    const structureNodes = toStructureNodes(structure);
-
-    // ✅ (GIỮ NGUYÊN) endpoint backend mong đợi
-    await api.put(`/question-banks/${bankId}/structure`, {
-      structureSource,
-      structureNodes,
-    });
-  };
-
+  // ====== SAVE: library (endpoint mới) ======
   const saveFromLibrary = async () => {
-    const structure = { ...lib, khoi, mon, sach };
+    if (!bankId) return alert("Thiếu bankId");
+    if (!bookId) return alert("Vui lòng chọn sách");
 
     try {
-      await saveToBackendIfNeeded(structure, "library");
-      onSaved?.(structure);
+      // backend áp cấu trúc từ thư viện
+      await api.put(`/question-banks/${bankId}/structure/from-library`, { bookId });
+
+      // trả về format tree cho page cha dùng ngay (không bắt buộc)
+      const structureForOnSaved = {
+        source: "library",
+        bookId,
+        title: bookDetail?.title || "",
+        topics: (bookDetail?.units || []).map((u) => ({
+          id: u.id,
+          title: u.title,
+          open: !!u.open,
+          lessons: (u.lessons || []).map((l) => ({
+            id: l.id,
+            title: `Bài ${l.code}: ${l.title}`,
+          })),
+        })),
+      };
+
+      onSaved?.(structureForOnSaved);
       onClose?.();
     } catch (err) {
-      console.error("Lỗi lưu cấu trúc:", err);
-      alert("Không thể lưu cấu trúc lên hệ thống. Vui lòng thử lại.");
+      console.error(err);
+      alert("Không thể áp cấu trúc từ thư viện. Vui lòng thử lại.");
     }
   };
 
-  // ====== Manual actions ======
+  // ====== SAVE: manual (endpoint cũ) ======
   const canSaveManual = useMemo(() => manualTopics.length > 0, [manualTopics]);
 
   const addTopic = () => {
@@ -179,29 +197,10 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
     setManualTopics((prev) =>
       prev.map((t) => {
         if (t.id !== activeTopicId) return t;
-        return { ...t, lessons: [...t.lessons, { id: uid("l"), title }] };
+        return { ...t, lessons: [...(t.lessons || []), { id: uid("l"), title }] };
       })
     );
     setLessonTitle("");
-  };
-
-  const toggleTopic = (topicId) => {
-    setLib((prev) => ({
-      ...prev,
-      topics: prev.topics.map((t) => (t.id === topicId ? { ...t, open: !t.open } : t)),
-    }));
-  };
-
-  const removeLesson = (topicId, lessonId) => {
-    setLib((prev) => ({
-      ...prev,
-      topics: prev.topics
-        .map((t) => {
-          if (t.id !== topicId) return t;
-          return { ...t, lessons: t.lessons.filter((l) => l.id !== lessonId) };
-        })
-        .filter((t) => t.lessons.length > 0),
-    }));
   };
 
   const toggleManualTopic = (topicId) => {
@@ -232,7 +231,7 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
         if (t.id !== topicId) return t;
         return {
           ...t,
-          lessons: t.lessons.map((l) => (l.id === lessonId ? { ...l, title: next } : l)),
+          lessons: (t.lessons || []).map((l) => (l.id === lessonId ? { ...l, title: next } : l)),
         };
       })
     );
@@ -245,19 +244,17 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
       prev
         .map((t) => {
           if (t.id !== topicId) return t;
-          return { ...t, lessons: t.lessons.filter((l) => l.id !== lessonId) };
+          return { ...t, lessons: (t.lessons || []).filter((l) => l.id !== lessonId) };
         })
-        .filter((t) => t.lessons.length > 0 || t.title)
+        .filter((t) => (t.lessons || []).length > 0 || (t.title || "").trim().length > 0)
     );
   };
 
   const saveFromManual = async () => {
-    // convert manualTopics -> structure
+    if (!bankId) return alert("Thiếu bankId");
+
     const structure = {
       source: "manual",
-      khoi,
-      mon,
-      sach: "(Tự nhập)",
       topics: manualTopics.map((t) => ({
         id: t.id,
         title: t.title,
@@ -267,11 +264,15 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
     };
 
     try {
-      await saveToBackendIfNeeded(structure, "manual");
-      onSaved?.(structure); // giữ format như cũ để page cha không hỏng
+      await api.put(`/question-banks/${bankId}/structure`, {
+        structureSource: "manual_entry",
+        structureNodes: toStructureNodes(structure),
+      });
+
+      onSaved?.(structure);
       onClose?.();
     } catch (err) {
-      console.error("Lỗi lưu cấu trúc (manual):", err);
+      console.error(err);
       alert("Không thể lưu cấu trúc lên hệ thống. Vui lòng thử lại.");
     }
   };
@@ -320,7 +321,7 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
           {step === "choose" && (
             <>
               <div style={{ textAlign: "center", marginTop: 6 }}>
-                <div style={{ fontSize: 26, fontWeight: 950 }}>Chọn nguồn sách để tạo cấu trúc ngân</div>
+                <div style={{ fontSize: 26, fontWeight: 950 }}>Chọn nguồn sách để tạo cấu trúc</div>
                 <div style={{ marginTop: 8, color: "#64748b", fontWeight: 700 }}>
                   Lựa chọn phương thức phù hợp để tạo cấu trúc ngân hàng câu hỏi
                 </div>
@@ -362,32 +363,14 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
                   <div style={{ textAlign: "center", fontSize: 20, fontWeight: 950 }}>Thư viện Openquiz</div>
 
                   <div style={{ textAlign: "center", color: "#64748b", fontWeight: 700, lineHeight: 1.5 }}>
-                    Sử dụng cấu trúc ngân hàng câu hỏi có sẵn trong thư viện openquiz với cấu trúc đã được tối ưu và kiểm duyệt
+                    Sử dụng cấu trúc có sẵn theo sách (bookId) để tạo nhanh Unit / Lesson A-B-C-D
                   </div>
 
                   <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 6 }}>
-                    <span
-                      style={{
-                        padding: "6px 10px",
-                        borderRadius: 999,
-                        background: "#dcfce7",
-                        color: "#166534",
-                        fontWeight: 900,
-                        fontSize: 12,
-                      }}
-                    >
+                    <span style={{ padding: "6px 10px", borderRadius: 999, background: "#dcfce7", color: "#166534", fontWeight: 900, fontSize: 12 }}>
                       ⚡ Nhanh chóng
                     </span>
-                    <span
-                      style={{
-                        padding: "6px 10px",
-                        borderRadius: 999,
-                        background: "#dbeafe",
-                        color: "#1d4ed8",
-                        fontWeight: 900,
-                        fontSize: 12,
-                      }}
-                    >
+                    <span style={{ padding: "6px 10px", borderRadius: 999, background: "#dbeafe", color: "#1d4ed8", fontWeight: 900, fontSize: 12 }}>
                       ✓ Đã kiểm duyệt
                     </span>
                   </div>
@@ -397,7 +380,7 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
                   </div>
                 </div>
 
-                {/* ✅ MANUAL */}
+                {/* Manual */}
                 <div
                   onClick={() => setStep("manual")}
                   style={{
@@ -443,43 +426,117 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
             </>
           )}
 
+          {/* ====== STEP LIBRARY ====== */}
+          {step === "library" && (
+            <>
+              <div style={{ fontWeight: 950, marginBottom: 8 }}>Kho Openquiz</div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: 10, alignItems: "center" }}>
+                <div style={{ fontWeight: 900, color: "#334155" }}>Chọn sách</div>
+                <select
+                  value={bookId}
+                  onChange={(e) => setBookId(e.target.value)}
+                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
+                  disabled={loadingBooks}
+                >
+                  <option value="">{loadingBooks ? "Đang tải..." : "— Chọn sách —"}</option>
+                  {books.map((b) => (
+                    <option key={b.bookId} value={b.bookId}>
+                      {b.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ marginTop: 14, borderTop: "1px solid #eef2f7", paddingTop: 14 }}>
+                {loadingBookDetail && <div style={{ color: "#64748b", fontWeight: 700 }}>Đang tải cấu trúc...</div>}
+
+                {!loadingBookDetail && bookDetail?.units?.length ? (
+                  bookDetail.units.map((u) => (
+                    <div key={u.id} style={{ marginBottom: 12 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 950 }}>
+                        <button
+                          type="button"
+                          onClick={() => toggleUnit(u.id)}
+                          style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 950 }}
+                        >
+                          {u.open ? "▾" : "▸"}
+                        </button>
+                        <div>Unit: {u.title}</div>
+                      </div>
+
+                      {u.open &&
+                        (u.lessons || []).map((l) => (
+                          <div
+                            key={l.id}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "10px 6px 10px 28px",
+                            }}
+                          >
+                            <div style={{ color: "#0f172a", fontWeight: 700 }}>
+                              Bài {l.code}: {l.title}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  ))
+                ) : (
+                  !loadingBookDetail && <div style={{ color: "#64748b", fontWeight: 700 }}>Chưa có dữ liệu.</div>
+                )}
+              </div>
+
+              <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => setStep("choose")}
+                  style={{ background: "transparent", border: "none", color: "#2563eb", fontWeight: 950, cursor: "pointer" }}
+                >
+                  ← Quay lại
+                </button>
+
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    style={{
+                      background: "#e2e8f0",
+                      border: "none",
+                      padding: "10px 14px",
+                      borderRadius: 10,
+                      fontWeight: 950,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Hủy
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={saveFromLibrary}
+                    style={{
+                      background: "#111827",
+                      color: "#fff",
+                      border: "none",
+                      padding: "10px 14px",
+                      borderRadius: 10,
+                      fontWeight: 950,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           {/* ====== STEP MANUAL ====== */}
           {step === "manual" && (
             <>
               <div style={{ fontWeight: 950 }}>Tự nhập cấu trúc</div>
-
-              {/* Filters giống style cũ */}
-              <div
-                style={{
-                  marginTop: 14,
-                  display: "grid",
-                  gridTemplateColumns: "140px 1fr 140px 1fr",
-                  gap: 10,
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ fontWeight: 900, color: "#334155" }}>Khối học</div>
-                <select
-                  value={khoi}
-                  onChange={(e) => setKhoi(e.target.value)}
-                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
-                >
-                  <option>Khối 10</option>
-                  <option>Khối 11</option>
-                  <option>Khối 12</option>
-                </select>
-
-                <div style={{ fontWeight: 900, color: "#334155" }}>Môn học</div>
-                <select
-                  value={mon}
-                  onChange={(e) => setMon(e.target.value)}
-                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
-                >
-                  <option>Tiếng Anh</option>
-                  <option>Toán</option>
-                  <option>Ngữ văn</option>
-                </select>
-              </div>
 
               <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 {/* LEFT: TREE */}
@@ -522,55 +579,21 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
                                 e.stopPropagation();
                                 toggleManualTopic(t.id);
                               }}
-                              style={{
-                                border: "none",
-                                background: "transparent",
-                                cursor: "pointer",
-                                fontWeight: 950,
-                              }}
+                              style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 950 }}
                               title="Mở/đóng"
                             >
                               {t.open ? "▾" : "▸"}
                             </button>
-                            <div
-                              style={{
-                                fontWeight: 950,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
-                            >
+                            <div style={{ fontWeight: 950, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                               Chủ đề: {t.title}
                             </div>
                           </div>
 
-                          <div
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ display: "flex", gap: 8, flexShrink: 0 }}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => renameManualTopic(t.id)}
-                              style={{
-                                border: "none",
-                                background: "transparent",
-                                cursor: "pointer",
-                                fontWeight: 900,
-                              }}
-                            >
+                          <div onClick={(e) => e.stopPropagation()} style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                            <button type="button" onClick={() => renameManualTopic(t.id)} style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 900 }}>
                               Sửa
                             </button>
-                            <button
-                              type="button"
-                              onClick={() => deleteManualTopic(t.id)}
-                              style={{
-                                border: "none",
-                                background: "transparent",
-                                cursor: "pointer",
-                                fontWeight: 900,
-                                color: "#b91c1c",
-                              }}
-                            >
+                            <button type="button" onClick={() => deleteManualTopic(t.id)} style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 900, color: "#b91c1c" }}>
                               Xóa
                             </button>
                           </div>
@@ -578,52 +601,15 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
 
                         {t.open &&
                           (t.lessons || []).map((l) => (
-                            <div
-                              key={l.id}
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                padding: "10px 6px 10px 34px",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  color: "#0f172a",
-                                  fontWeight: 700,
-                                  minWidth: 0,
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
+                            <div key={l.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 6px 10px 34px" }}>
+                              <div style={{ color: "#0f172a", fontWeight: 700, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {l.title}
                               </div>
                               <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
-                                <button
-                                  type="button"
-                                  onClick={() => renameManualLesson(t.id, l.id)}
-                                  style={{
-                                    border: "none",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    fontWeight: 900,
-                                  }}
-                                >
+                                <button type="button" onClick={() => renameManualLesson(t.id, l.id)} style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 900 }}>
                                   Sửa
                                 </button>
-                                <button
-                                  type="button"
-                                  onClick={() => deleteManualLesson(t.id, l.id)}
-                                  style={{
-                                    border: "none",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    fontWeight: 900,
-                                    color: "#b91c1c",
-                                  }}
-                                  title="Xóa"
-                                >
+                                <button type="button" onClick={() => deleteManualLesson(t.id, l.id)} style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 900, color: "#b91c1c" }} title="Xóa">
                                   ✕
                                 </button>
                               </div>
@@ -635,46 +621,17 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
                 </div>
 
                 {/* RIGHT: ADD */}
-                <div
-                  style={{
-                    border: "1px solid #eef2f7",
-                    borderRadius: 14,
-                    padding: 12,
-                    background: "#fff",
-                    height: "fit-content",
-                  }}
-                >
+                <div style={{ border: "1px solid #eef2f7", borderRadius: 14, padding: 12, background: "#fff", height: "fit-content" }}>
                   <div style={{ fontWeight: 950, marginBottom: 8 }}>Thêm mục</div>
 
                   <div style={{ fontWeight: 900, marginTop: 8, color: "#334155" }}>Chủ đề</div>
                   <input
                     value={topicTitle}
                     onChange={(e) => setTopicTitle(e.target.value)}
-                    placeholder="Ví dụ: Chương 1 / Unit 1"
-                    style={{
-                      width: "100%",
-                      marginTop: 6,
-                      padding: 10,
-                      borderRadius: 10,
-                      border: "1px solid #e2e8f0",
-                      fontWeight: 700,
-                    }}
+                    placeholder="Ví dụ: Unit 1 / Chương 1"
+                    style={{ width: "100%", marginTop: 6, padding: 10, borderRadius: 10, border: "1px solid #e2e8f0", fontWeight: 700 }}
                   />
-                  <button
-                    type="button"
-                    onClick={addTopic}
-                    style={{
-                      width: "100%",
-                      marginTop: 10,
-                      background: "#111827",
-                      color: "#fff",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      fontWeight: 950,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <button type="button" onClick={addTopic} style={{ width: "100%", marginTop: 10, background: "#111827", color: "#fff", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}>
                     + Thêm chủ đề
                   </button>
 
@@ -685,31 +642,10 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
                   <input
                     value={lessonTitle}
                     onChange={(e) => setLessonTitle(e.target.value)}
-                    placeholder="Ví dụ: Vocabulary / Grammar / Bài 1"
-                    style={{
-                      width: "100%",
-                      marginTop: 6,
-                      padding: 10,
-                      borderRadius: 10,
-                      border: "1px solid #e2e8f0",
-                      fontWeight: 700,
-                    }}
+                    placeholder="Ví dụ: Bài A / Grammar / Vocabulary"
+                    style={{ width: "100%", marginTop: 6, padding: 10, borderRadius: 10, border: "1px solid #e2e8f0", fontWeight: 700 }}
                   />
-                  <button
-                    type="button"
-                    onClick={addLesson}
-                    style={{
-                      width: "100%",
-                      marginTop: 10,
-                      background: "#eef2ff",
-                      color: "#1d4ed8",
-                      border: "1px solid #c7d2fe",
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      fontWeight: 950,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <button type="button" onClick={addLesson} style={{ width: "100%", marginTop: 10, background: "#eef2ff", color: "#1d4ed8", border: "1px solid #c7d2fe", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}>
                     + Thêm bài vào chủ đề đang chọn
                   </button>
 
@@ -720,173 +656,16 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
               </div>
 
               <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <button
-                  type="button"
-                  onClick={() => setStep("choose")}
-                  style={{ background: "transparent", border: "none", color: "#2563eb", fontWeight: 950, cursor: "pointer" }}
-                >
+                <button type="button" onClick={() => setStep("choose")} style={{ background: "transparent", border: "none", color: "#2563eb", fontWeight: 950, cursor: "pointer" }}>
                   ← Quay lại
                 </button>
 
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    style={{
-                      background: "#e2e8f0",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      fontWeight: 950,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <button type="button" onClick={onClose} style={{ background: "#e2e8f0", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}>
                     Hủy
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={saveFromManual}
-                    disabled={!canSaveManual}
-                    style={{
-                      background: canSaveManual ? "#111827" : "#94a3b8",
-                      color: "#fff",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      fontWeight: 950,
-                      cursor: canSaveManual ? "pointer" : "not-allowed",
-                    }}
-                  >
-                    Lưu
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ====== STEP LIBRARY ====== */}
-          {step === "library" && (
-            <>
-              <div style={{ fontWeight: 950, marginBottom: 8 }}>Kho Openquiz</div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "140px 1fr 140px 1fr 90px 2fr",
-                  gap: 10,
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ fontWeight: 900, color: "#334155" }}>Khối học</div>
-                <select
-                  value={khoi}
-                  onChange={(e) => setKhoi(e.target.value)}
-                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
-                >
-                  <option>Khối 10</option>
-                  <option>Khối 11</option>
-                  <option>Khối 12</option>
-                </select>
-
-                <div style={{ fontWeight: 900, color: "#334155" }}>Môn học</div>
-                <select
-                  value={mon}
-                  onChange={(e) => setMon(e.target.value)}
-                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
-                >
-                  <option>Tiếng Anh</option>
-                  <option>Toán</option>
-                  <option>Ngữ văn</option>
-                </select>
-
-                <div style={{ fontWeight: 900, color: "#334155" }}>Sách</div>
-                <select
-                  value={sach}
-                  onChange={(e) => setSach(e.target.value)}
-                  style={{ padding: 10, borderRadius: 10, border: "1px solid #e2e8f0" }}
-                >
-                  <option>Tiếng Anh 10 - friends global</option>
-                  <option>Tiếng Anh 10 - global success</option>
-                </select>
-              </div>
-
-              <div style={{ marginTop: 14, borderTop: "1px solid #eef2f7", paddingTop: 14 }}>
-                {lib.topics.map((t) => (
-                  <div key={t.id} style={{ marginBottom: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 950 }}>
-                      <button
-                        type="button"
-                        onClick={() => toggleTopic(t.id)}
-                        style={{ border: "none", background: "transparent", cursor: "pointer", fontWeight: 950 }}
-                      >
-                        {t.open ? "▾" : "▸"}
-                      </button>
-                      <div>Chủ đề: {t.title}</div>
-                    </div>
-
-                    {t.open &&
-                      t.lessons.map((l) => (
-                        <div
-                          key={l.id}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: "10px 6px 10px 28px",
-                          }}
-                        >
-                          <div style={{ color: "#0f172a", fontWeight: 700 }}>{l.title}</div>
-                          <button
-                            type="button"
-                            onClick={() => removeLesson(t.id, l.id)}
-                            style={{
-                              border: "none",
-                              background: "transparent",
-                              cursor: "pointer",
-                              fontWeight: 900,
-                              color: "#0f172a",
-                            }}
-                            title="Loại bỏ"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <button
-                  type="button"
-                  onClick={() => setStep("choose")}
-                  style={{ background: "transparent", border: "none", color: "#2563eb", fontWeight: 950, cursor: "pointer" }}
-                >
-                  ← Quay lại
-                </button>
-
-                <div style={{ display: "flex", gap: 10 }}>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    style={{
-                      background: "#e2e8f0",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      fontWeight: 950,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Hủy
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={saveFromLibrary}
-                    style={{ background: "#111827", color: "#fff", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}
-                  >
+                  <button type="button" onClick={saveFromManual} disabled={!canSaveManual} style={{ background: canSaveManual ? "#111827" : "#94a3b8", color: "#fff", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: canSaveManual ? "pointer" : "not-allowed" }}>
                     Lưu
                   </button>
                 </div>
@@ -895,14 +674,10 @@ export default function CreateStructureModal({ open, onClose, onSaved, bankId })
           )}
         </div>
 
-        {/* Footer CHUNG: chỉ hiện nút Hủy ở step choose giống ảnh */}
+        {/* Footer: chỉ show ở choose */}
         {step === "choose" && (
           <div style={{ padding: 16, borderTop: "1px solid #eef2f7", display: "flex", justifyContent: "flex-end" }}>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{ background: "#e2e8f0", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}
-            >
+            <button type="button" onClick={onClose} style={{ background: "#e2e8f0", border: "none", padding: "10px 14px", borderRadius: 10, fontWeight: 950, cursor: "pointer" }}>
               Hủy
             </button>
           </div>

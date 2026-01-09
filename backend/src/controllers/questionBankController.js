@@ -24,6 +24,31 @@ function mapStructureSource(input) {
 }
 
 /* ===================== BANK CRUD ===================== */
+const BookTemplate = require("../models/BookTemplate");
+
+exports.applyStructureFromLibrary = async (req, res) => {
+  const { bankId } = req.params;
+  const { bookId } = req.body;
+
+  const book = await BookTemplate.findOne({ bookId, status: "published" });
+  if (!book) return res.status(404).json({ ok: false, error: { code: "BOOK_NOT_FOUND", message: "Không tìm thấy bookId" } });
+
+  const nodes = [];
+  book.units.forEach((u, ui) => {
+    nodes.push({ id: u.id, parentId: null, title: u.title, type: "unit", order: ui, meta: {} });
+    u.lessons.forEach((l, li) => {
+      nodes.push({ id: l.id, parentId: u.id, title: `Bài ${l.code}: ${l.title}`, type: "lesson", order: li, meta: { code: l.code } });
+    });
+  });
+
+  const bank = await QuestionBank.findByIdAndUpdate(
+    bankId,
+    { structureSource: "openquiz_library", structureBookId: bookId, structureNodes: nodes },
+    { new: true }
+  );
+
+  return res.json({ ok: true, item: bank });
+};
 
 exports.listMyBanks = async (req, res, next) => {
   try {

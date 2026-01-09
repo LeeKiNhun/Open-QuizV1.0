@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CreateStructureModal from "./CreateStructureModal";
+import GenerateQuizFromLessons from "../../components/GenerateQuizFromLessons"; 
+import { importSeedQuestions } from "../../api/seedApi";
 
 const LS_KEY = "oq_question_banks_v1";
 
@@ -234,19 +236,43 @@ export default function QuestionBankDetailPage() {
           />
 
           <button
-            onClick={() => navigate(`/nganhang/${id}/nhap-cau-hoi`)}
-            style={{
-              background: "#1d4ed8",
-              color: "#fff",
-              border: "none",
-              padding: "10px 14px",
-              borderRadius: 10,
-              fontWeight: 900,
-              cursor: "pointer",
-            }}
-          >
-            + Nhập câu hỏi
-          </button>
+          onClick={async () => {
+            try {
+              const res = await fetch(`${API_BASE}/api/${id}/questions/seed`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ perLesson: 100 }), // ✅ 100 câu / lesson
+              });
+
+              const data = await res.json();
+
+              if (!res.ok || !data?.ok) {
+                alert(data?.message || "Seed lỗi");
+                return;
+              }
+
+              alert(data.message || "Seed xong!");
+              // ✅ nếu bạn có UI đếm câu hỏi, bạn có thể reload bank/structure ở đây
+              // ví dụ gọi lại fetch structure hoặc gọi API count câu hỏi.
+            } catch (e) {
+              console.error(e);
+              alert("Seed lỗi. Xem console.");
+            }
+          }}
+          style={{
+            background: "#0353ffff",
+            color: "#fff",
+            border: "none",
+            padding: "10px 14px",
+            borderRadius: 10,
+            fontWeight: 900,
+            cursor: "pointer",
+          }}
+        >
+          + Nhập câu hỏi
+        </button>
+
         </div>
       </div>
 
@@ -474,6 +500,14 @@ export default function QuestionBankDetailPage() {
         bankId={id} // ✅ TRUYỀN BANK ID
         onClose={() => setOpenStructure(false)}
         onSaved={handleSavedStructure}
+      />
+      <GenerateQuizFromLessons
+        bankId={id}
+        structure={structure}
+        onCreated={(quiz) => {
+          // điều hướng sang trang làm bài / trang chi tiết quiz
+          navigate(`/quizzes/${quiz._id}/take`);
+        }}
       />
     </div>
   );

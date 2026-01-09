@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const raw = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const baseURL = raw.endsWith("/api") ? raw : `${raw.replace(/\/$/, "")}/api`;
+export const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+  withCredentials: true, // optional (nếu bạn dùng cookie). Dùng Bearer token thì không bắt buộc
+});
 
-export const api = axios.create({ baseURL });
-
+// ✅ add token nếu auth bằng JWT
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token"); // đổi key nếu khác
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
